@@ -4,6 +4,7 @@ export default async function handler(req, res) {
 	let client;
 	try {
 		client = await pool.connect();
+        console.log('yessss');
 	}
 	catch (e) {
 		console.trace(e);
