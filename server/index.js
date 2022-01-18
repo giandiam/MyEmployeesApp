@@ -19,4 +19,4 @@ app.get('/', db.employeeLogin);
 app.post('/', db.employeeUsername);
 app.post('/signup', db.employeeSignup);
 
-app.listen(8081);
+app.listen(process.env.PORT || 3001);
