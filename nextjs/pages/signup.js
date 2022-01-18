@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { Grid,Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
-export default function signup() {
+export default function Signup() {
     const paperStyle={padding :20,height:'70vh',width:380, margin:"20px auto"}
     const avatarStyle={backgroundColor:'#662929'}
     const btnstyle={margin:'20px 0',backgroundColor:'#662929'}
