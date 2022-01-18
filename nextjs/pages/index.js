@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`http://localhost:3001`, {method: 'GET'});
+    const res = await fetch(`http://localhost:3001` || 'https://myemployeesapp-server.herokuapp.com/', {method: 'GET'});
     const data = await res.json();
     if(!data)
     return {
@@ -44,7 +44,7 @@ export default function Home(props){
         const userData = {
           username: username
         }
-        const res = await fetch(`http://localhost:3001/`, {
+        const res = await fetch(`http://localhost:3001/` || 'https://myemployeesapp-server.herokuapp.com/', {
           method: 'POST',
           headers: {
             Accept: 'application/json',
