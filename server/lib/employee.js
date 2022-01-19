@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://postgres:pg123@localhost:5432/Employee',
-  ssl: process.env.DATABASE_URL ? true : false 
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false 
 });
 
 exports.employeeLogin = async function employeeLogin (req, res) {
