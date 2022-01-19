@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`https://myemployeesapp-server.herokuapp.com/`, {method: 'GET'});
+    const res = await fetch(`${process.env.URL}`, {method: 'GET'});
     const data = await res.json();
     if(!data)
     return {
@@ -44,7 +44,7 @@ export default function Home(props){
         const userData = {
           username: username
         }
-        const res = await fetch(`https://myemployeesapp-server.herokuapp.com/`, {
+        const res = await fetch(`http://localhost:3001`, {
           method: 'POST',
           headers: {
             Accept: 'application/json',
@@ -91,7 +91,7 @@ export default function Home(props){
               <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={usernameCheck}>Sign in</Button>
               <Typography align='center' color='textSecondary'>or</Typography>
               <Button type='submit' variant="contained" style={{margin:'20px 0',color:'#662929',backgroundColor:'white'}} onClick={() => signIn()} fullWidth>Google</Button>
-              <Typography align='center' marginTop={13} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
+              <Typography align='center' marginTop={20} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
                    <Link href="/signup" >
                       Sign Up 
                   </Link>

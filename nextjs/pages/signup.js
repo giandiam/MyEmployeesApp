@@ -22,7 +22,7 @@ export default function Signup() {
                 username: username,
                 password: password1
             }
-            const res = await fetch(`https://myemployeesapp-server.herokuapp.com/signup`, {
+            const res = await fetch(`${process.env.URL}/signup`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
@@ -65,7 +65,7 @@ export default function Signup() {
                 <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={addUser}>Sign up</Button>
                 <Typography align='center' color='textSecondary'>or</Typography>
                 <Button type='submit' variant="contained" style={{margin:'20px 0',color:'#662929',backgroundColor:'white'}} fullWidth>Google</Button>
-                <Typography align='center' marginTop={6} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
+                <Typography align='center' marginTop={13} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
                      <Link href="/" >
                         Sign in 
                     </Link>
