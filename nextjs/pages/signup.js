@@ -22,7 +22,7 @@ export default function Signup() {
                 username: username,
                 password: password1
             }
-            const res = await fetch(`http://localhost:3001/signup` || 'https://myemployeesapp-server.herokuapp.com/signup', {
+            const res = await fetch(`https://myemployeesapp-server.herokuapp.com/signup`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
