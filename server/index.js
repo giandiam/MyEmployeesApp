@@ -16,7 +16,8 @@ app.use(session({
   }));
 
 app.get('/', db.employeeLogin);
-app.post('/', db.employeeUsername);
+app.post('/', db.sessionUsername);
+app.get('/employee', db.employee);
 app.post('/signup', db.employeeSignup);
 
 app.listen(process.env.PORT || 3001);

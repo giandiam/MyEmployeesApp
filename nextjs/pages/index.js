@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Grid,Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core';
+import { Grid,Paper, Avatar, TextField, Button, Typography, Link, Alert } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export async function getServerSideProps() {
@@ -31,16 +31,18 @@ export async function getServerSideProps() {
 
 export default function Home(props){
   const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [wrongInput, setWrongInput] = useState(false);
   const router = useRouter();
 
   if(props.error){
     router.replace('/employees/error');
   }
 
-  const usernameCheck =  async () =>{
+  const authCheck =  async () =>{
     try {
-      const usernameIdentity = props.data.map((obj) => obj.first_name === username);
-      if (usernameIdentity.includes(true)) {
+      const authIdentity = props.data.map((obj) => obj.username === username && obj.password === password);
+      if (authIdentity.includes(true)) {
         const userData = {
           username: username
         }
@@ -53,11 +55,11 @@ export default function Home(props){
           body: JSON.stringify(userData),
         
         });
-        const data = await res.json();
+        //const data = await res.json();
         router.push('/employee');
       }
       else {
-        console.log('User doesn\' t exist!');
+        setWrongInput(true);
       }
     }catch(e) {
           console.log(e);
@@ -87,8 +89,11 @@ export default function Home(props){
                   <h2 style={{color:'#662929',fontFamily: 'cursive'}}>Sign In</h2>
               </Grid>
               <TextField label='Username' placeholder='Enter username' fullWidth onChange={event => setUsername(event.target.value)} required/>
-              <TextField label='Password' placeholder='Enter password' type='password' fullWidth required/>
-              <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={usernameCheck}>Sign in</Button>
+              <TextField label='Password' placeholder='Enter password' type='password' fullWidth onChange={event => setPassword(event.target.value)} required/>
+              {
+                wrongInput ? (<Alert severity="error">Invalid username or password</Alert>) : null
+              }
+              <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={authCheck}>Sign in</Button>
               <Typography align='center' color='textSecondary'>or</Typography>
               <Button type='submit' variant="contained" style={{margin:'20px 0',color:'#662929',backgroundColor:'white'}} onClick={() => signIn()} fullWidth>Google</Button>
               <Typography align='center' marginTop={20} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
