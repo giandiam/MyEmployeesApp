@@ -44,7 +44,7 @@ export default function Home(props){
       
       if (authIdentity.includes(true)) {
 
-        const res = await fetch('http://localhost:3000/', {
+        const res = await fetch('https://myemployeesapp.herokuapp.com/', {
           method: 'POST',
           credentials: 'include',
           headers: {
