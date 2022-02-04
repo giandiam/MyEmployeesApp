@@ -40,7 +40,7 @@ exports.getEmployeeId = async function getEmployeeId (req, res) {
 }
 
 exports.getEmployees = async function getEmployees (req, res) {
-  console.log(req.session)
+  //console.log(req.session)
   const id = parseInt(req.params.id);
   const client = await pool.connect();
   try{
