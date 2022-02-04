@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`${process.env.URL}`, {
+    const res = await fetch(`https://myemployeesapp-server.herokuapp.com/`, {
       method: 'GET',
       credentials: 'include',
     });

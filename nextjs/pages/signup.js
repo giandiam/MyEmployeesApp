@@ -27,7 +27,7 @@ export default function Signup() {
                 firstName: firstName,
                 lastName: lastName
             }
-            const res = await fetch(`${process.env.URL}/signup`, {
+            const res = await fetch(`https://myemployeesapp-server.herokuapp.com/signup`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
