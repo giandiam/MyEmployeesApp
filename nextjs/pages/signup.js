@@ -27,7 +27,7 @@ export default function Signup() {
                 firstName: firstName,
                 lastName: lastName
             }
-            const res = await fetch(`http://localhost:3001/signup`, {
+            const res = await fetch(`${process.env.URL}/signup`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
@@ -35,7 +35,11 @@ export default function Signup() {
               },
               body: JSON.stringify(userData),            
             });
-            router.push('/employee');
+
+            const data = await res.json();
+            const id = data[0].id;
+
+            router.push('/employee/' + id);
           }
           else {
             console.log('User doesn\' t exist!');

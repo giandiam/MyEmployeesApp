@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Grid,Paper, Avatar, TextField, Button, Typography, Link, Alert } from '@material-ui/core';
+import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Alert } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export async function getServerSideProps() {
   try {
-    const res = await fetch(`${process.env.URL}`, {method: 'GET'});
+    const res = await fetch(`${process.env.URL}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
     const data = await res.json();
     if(!data)
     return {
@@ -35,28 +38,25 @@ export default function Home(props){
   const [wrongInput, setWrongInput] = useState(false);
   const router = useRouter();
 
-  if(props.error){
-    router.replace('/employees/error');
-  }
-
   const authCheck =  async () =>{
     try {
       const authIdentity = props.data.map((obj) => obj.username === username && obj.password === password);
+      
       if (authIdentity.includes(true)) {
-        const userData = {
-          username: username
-        }
-        const res = await fetch(`http://localhost:3001`, {
+
+        const res = await fetch('http://localhost:3000/', {
           method: 'POST',
+          credentials: 'include',
           headers: {
-            Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(userData),
-        
+          body: JSON.stringify({username: username}),       
         });
-        //const data = await res.json();
-        router.push('/employee');
+
+        const data = await res.json();
+        const id = data.id;
+        
+        router.push('/employee/'+ id);
       }
       else {
         setWrongInput(true);
@@ -95,7 +95,7 @@ export default function Home(props){
               }
               <Button type='submit' color='primary' variant="contained" style={btnstyle} fullWidth onClick={authCheck}>Sign in</Button>
               <Typography align='center' color='textSecondary'>or</Typography>
-              <Button type='submit' variant="contained" style={{margin:'20px 0',color:'#662929',backgroundColor:'white'}} onClick={() => signIn()} fullWidth>Google</Button>
+              <Button type='submit' variant="contained" style={{margin:'20px 0',color:'#662929',backgroundColor:'white'}} onClick={() => signIn("google")} fullWidth>Google</Button>
               <Typography align='center' marginTop={20} style={{color:'#662929',fontFamily: 'cursive'}}> Do you have an account?
                    <Link href="/signup" >
                       Sign Up 

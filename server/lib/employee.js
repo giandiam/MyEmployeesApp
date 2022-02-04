@@ -1,4 +1,6 @@
 const { Pool } = require('pg');
+// const jwt = require('jsonwebtoken');
+// require('dotenv').config()
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || 'postgresql://postgres:pg123@localhost:5432/Employee',
@@ -6,52 +8,79 @@ const pool = new Pool({
 });
 
 exports.employeeLogin = async function employeeLogin (req, res) {
-  req.session.destroy((err) => {
-    if (err) {
-      console.log('Session destroy error');
-      res.send('Error');
-    } 
-  });
   const client = await pool.connect();
   try{
-    const results = await client.query(
+    const employees = await client.query(
       'SELECT * FROM employees ORDER BY id ASC'
     );
-    res.status(200).json(results.rows);
+    res.json(employees.rows);
   }catch(e){
     console.log(e);
   }
   client.release();
 }
 
-exports.sessionUsername = async function sessionUsername (req, res) {
+exports.getEmployeeId = async function getEmployeeId (req, res) {
   req.session.username = req.body.username;
-  res.status(200).json(req.session.username);
+  const client = await pool.connect();
+  try{
+    const selectId = await client.query(
+     'SELECT id FROM employees WHERE username = $1', [req.body.username]
+    );
+    const id = selectId.rows[0].id
+    const updateId = await client.query(
+      'UPDATE employees SET is_active = $1 WHERE id = $2', [true, id]
+     );
+    //const token = jwt.sign({data:id}, process.env.TOKEN_SECRET, {expiresIn: '1h'});
+    res.json({id: id});
+  }catch(e){
+    console.log(e);
+  }
+  client.release();
 }
 
-exports.employee = async function employee (req, res) {
-  if(req.session.username){
-    const client = await pool.connect();
-    try{
-      const results = await client.query(
-      'SELECT * FROM employees ORDER BY id ASC'
+exports.getEmployees = async function getEmployees (req, res) {
+  console.log(req.session)
+  const id = parseInt(req.params.id);
+  const client = await pool.connect();
+  try{
+    const coEmployees = await client.query(
+      'SELECT * FROM employees WHERE id <> $1', [id]
     );
-      res.status(200).json(results.rows);
-    }catch(e){
-      console.log(e);
-    }
-    client.release();
-  } 
-  res.status(200).json(false);
+    const employeeUsername = await client.query(
+      'SELECT username FROM employees WHERE id = $1', [id]
+    );
+    res.json({coEmployees: coEmployees.rows, username: employeeUsername.rows[0].username});
+  }catch(e){
+    console.log(e);
+  }
+  client.release();
 }
 
 exports.employeeSignup = async function employeeSignup (req, res) {
+  //console.log(req.session,'wre')
   const client = await pool.connect();
   try{
-    const results = await client.query(
+    const insertEmployee = await client.query(
       'INSERT INTO employees (last_name,first_name,is_active,password,username) VALUES ($1,$2,$3,$4,$5)'
       , [req.body.lastName,req.body.firstName,true,req.body.password,req.body.username]);
-    res.status(200).json(results.rows);
+    const selectId = await client.query(
+        'SELECT id FROM employees WHERE username = $1', [req.body.username]
+       );
+       res.json(selectId.rows);
+  }catch(e){
+    console.log(e);
+  }
+  client.release();
+}
+
+exports.employeeLogout = async function employeeLogout (req, res) {
+  const client = await pool.connect();
+  try{
+    const updateId = await client.query(
+      'UPDATE employees SET is_active = $1 WHERE id = $2', [false, req.body.id]
+     );
+     res.send();
   }catch(e){
     console.log(e);
   }
