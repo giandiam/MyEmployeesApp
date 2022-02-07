@@ -14,7 +14,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 export async function getServerSideProps(context) { 
   try {
-    const res = await fetch(`https://myemployeesapp-server.herokuapp.com/employee/${context.params.id}`, {
+    const res = await fetch(`http://localhost:3000/employee/${context.params.id}`, {
       method: 'GET',
       credentials:'include'
     });
@@ -45,7 +45,7 @@ export default function Employee(props){
 
   const logout =  async () =>{
     try {
-      const res = await fetch('https://myemployeesapp-server.herokuapp.com/logout', {
+      const res = await fetch('http://localhost:3000/logout', {
           method: 'POST',
           credentials: 'include',
           headers: {

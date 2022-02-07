@@ -1,9 +1,7 @@
 const { Pool } = require('pg');
-// const jwt = require('jsonwebtoken');
-// require('dotenv').config()
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:pg123@localhost:5432/Employee',
+  connectionString: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/Employee',
   ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false 
 });
 
@@ -21,7 +19,6 @@ exports.employeeLogin = async function employeeLogin (req, res) {
 }
 
 exports.getEmployeeId = async function getEmployeeId (req, res) {
-  req.session.username = req.body.username;
   const client = await pool.connect();
   try{
     const selectId = await client.query(
@@ -31,7 +28,6 @@ exports.getEmployeeId = async function getEmployeeId (req, res) {
     const updateId = await client.query(
       'UPDATE employees SET is_active = $1 WHERE id = $2', [true, id]
      );
-    //const token = jwt.sign({data:id}, process.env.TOKEN_SECRET, {expiresIn: '1h'});
     res.json({id: id});
   }catch(e){
     console.log(e);
@@ -40,7 +36,6 @@ exports.getEmployeeId = async function getEmployeeId (req, res) {
 }
 
 exports.getEmployees = async function getEmployees (req, res) {
-  //console.log(req.session)
   const id = parseInt(req.params.id);
   const client = await pool.connect();
   try{
@@ -58,7 +53,6 @@ exports.getEmployees = async function getEmployees (req, res) {
 }
 
 exports.employeeSignup = async function employeeSignup (req, res) {
-  //console.log(req.session,'wre')
   const client = await pool.connect();
   try{
     const insertEmployee = await client.query(

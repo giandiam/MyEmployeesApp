@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {useRouter} from 'next/router';
 import Head from 'next/head';
 import { Grid,Paper, Avatar, TextField, Button, Typography, Link, Box } from '@material-ui/core';
-//import Box from '@material-ui/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 
 export default function Signup() {
@@ -27,7 +26,7 @@ export default function Signup() {
                 firstName: firstName,
                 lastName: lastName
             }
-            const res = await fetch(`https://myemployeesapp-server.herokuapp.com/signup`, {
+            const res = await fetch(`http://localhost:3000/signup`, {
               method: 'POST',
               headers: {
                 Accept: 'application/json',
